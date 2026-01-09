@@ -1,0 +1,13 @@
+Backend/DriverLicenseManagmentAPI/.vs/
+Backend/DriverLicenseManagmentAPI/bin/
+Backend/DriverLicenseManagmentAPI/obj/
+Backend/DriverLicenseManagmentAPI/Properties/
+Backend/DriverLicenseManagmentAPI/Resources/
+Backend/DLMBusinessLayer/bin/
+Backend/DLMBusinessLayer/obj/
+Backend/DLMBusinessLayer/Properties/
+Backend/DLMBusinessLayer/Resources/
+Backend/DLMDataLayer/bin/
+Backend/DLMDataLayer/obj/
+Backend/DLMDataLayer/Properties/
+Backend/DLMDataLayer/clsDataAccessSettings.cs
