@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DLMDataLayer\DLMDataLayer.csproj" />
+    <ProjectReference Include="..\ModelsLayer\ModelsLayer.csproj" />
+    <ProjectReference Include="..\ModelsLayer\ModelsLayer1.csproj" />
   </ItemGroup>
 
 </Project>
