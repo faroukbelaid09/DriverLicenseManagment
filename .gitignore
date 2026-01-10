@@ -11,3 +11,6 @@ Backend/DLMDataLayer/bin/
 Backend/DLMDataLayer/obj/
 Backend/DLMDataLayer/Properties/
 Backend/DLMDataLayer/clsDataAccessSettings.cs
+ModelsLayer/bin/
+ModelsLayer/obj/
+ModelsLayer/Properties/
