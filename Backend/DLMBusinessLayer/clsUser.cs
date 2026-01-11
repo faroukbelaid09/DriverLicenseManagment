@@ -34,6 +34,11 @@ namespace DLMBusinessLayer
             return clsUserDataAccess.CheckIfUserExists(personID);
         }
 
+        public static List<UserDTO> GetUsers()
+        {
+            return clsUserDataAccess.GetUsers();
+        }
+
         /*
         public int Add()
         {

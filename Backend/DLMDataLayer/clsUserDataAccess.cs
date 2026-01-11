@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
+using ModelsLayer;
 using System.Data;
 
 namespace DLMDataLayer
@@ -31,41 +32,33 @@ namespace DLMDataLayer
             }
         }
 
-        /*
-        public static bool CheckIfUserNameExist(string username)
+        public static List<UserDTO> GetUsers()
         {
-            bool found = false;
+            List<UserDTO> users = new List<UserDTO>();
 
-            SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString);
-            string query = @"select 1 from Users where Users.UserName = @username;";
-
-            SqlCommand command = new SqlCommand(query, connection);
-            command.Parameters.AddWithValue("@username", username);
-
-            try
+            using (SqlConnection conn = new SqlConnection(clsDataAccessSettings.ConnectionString))
             {
-                connection.Open();
-
-                object result = command.ExecuteScalar();
-
-                if (result != null && int.TryParse(result.ToString(), out int res))
+                using (SqlCommand cmd = new SqlCommand("GetUsers", conn))
                 {
-                    found = true;
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            users.Add(new UserDTO(
+                                reader.GetInt32(reader.GetOrdinal("UserID")),
+                                reader.GetInt32(reader.GetOrdinal("PersonID")),
+                                reader.GetString(reader.GetOrdinal("UserName")),
+                                reader.GetString(reader.GetOrdinal("FullName")),
+                                reader.GetBoolean(reader.GetOrdinal("IsActive"))
+                                ));
+                        }
+                    }
                 }
             }
-            catch (Exception ex)
-            {
-                found = false;
-                Console.WriteLine("DB: Error when looking for a user in DB.\n" + ex.Message);
-            }
-            finally
-            {
-                connection?.Close();
-            }
-
-            return found;
+            return users;
         }
-        
+
+        /*
         public static bool FindUserByUserNameAndPassword(ref int userID, ref int personID, ref string username, ref string password, ref bool isActive)
         {
             bool userFound = false;
@@ -113,44 +106,6 @@ namespace DLMDataLayer
             }
 
             return userFound;
-        }
-        
-        public static DataTable GetUsers()
-        {
-            DataTable dt = new DataTable();
-            SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString);
-
-
-            string query = "select Users.*, FullName = People.FirstName+People.LastName from Users inner join People on Users.PersonID = People.PersonID";
-
-            SqlCommand command = new SqlCommand(query, connection);
-
-            try
-            {
-                connection.Open();
-
-                SqlDataReader reader = command.ExecuteReader();
-
-                if (reader.HasRows)
-
-                {
-                    dt.Load(reader);
-                }
-
-                reader.Close();
-            }
-
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error: " + ex.Message);
-            }
-            finally
-            {
-                connection?.Close();
-            }
-
-            return dt;
-
         }
 
         public static int AddUser(int PersonID, string UserName, string Password, bool IsActive)
