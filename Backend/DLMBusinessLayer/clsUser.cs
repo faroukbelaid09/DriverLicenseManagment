@@ -94,51 +94,13 @@ namespace DLMBusinessLayer
             // Using BCrypt
             return BCrypt.Net.BCrypt.HashPassword(password);
         }
+        
+        public bool Delete(int userId)
+        {
+            return clsUserDataAccess.DeleteUser(userId);
+        }
 
         /*
-        
-        public bool Delete()
-        {
-            return clsUserDataAccess.DeleteUser(this.UserID);
-        }
-        
-        public static List<clsUser> GetAllUsers()
-        {
-
-            List<clsUser> users = new List<clsUser>();
-
-            DataTable dataTable = clsUserDataAccess.GetUsers();
-
-            if (dataTable.Rows != null)
-            {
-                foreach (DataRow row in dataTable.Rows)
-                {
-                    // Extract data from the DataRow
-                    int userID = Convert.ToInt32(row["UserID"]);
-                    int personID = Convert.ToInt32(row["PersonID"]);
-                    string userName = row["UserName"].ToString();
-                    string fullName = row["FullName"].ToString();
-                    string password = row["Password"].ToString();
-                    bool isActive = Convert.ToBoolean(row["IsActive"]);
-
-                    // Create a new clsPerson object and add it to the list
-                    clsUser user = new clsUser(
-                        userID,
-                        personID,
-                        userName,
-                        fullName,
-                        password,
-                        isActive
-                    );
-
-                    users.Add(user);
-                }
-
-                return users;
-            }
-
-            return null;
-        }
         public static clsUser FindUserByUserNameAndPassword(string username, string password)
         {
             int userID = -1, personID = -1;

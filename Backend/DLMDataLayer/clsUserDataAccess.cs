@@ -172,6 +172,23 @@ namespace DLMDataLayer
             return isUpdated;
         }
 
+        public static bool DeleteUser(int UserID)
+        {
+            bool isDeleted = false;
+
+            using (SqlConnection conn = new SqlConnection(clsDataAccessSettings.ConnectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand("DeleteUser",conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@UserID", UserID);
+                    conn.Open();
+
+                    isDeleted = cmd.ExecuteNonQuery() > 0 ;
+                }
+            }
+            return isDeleted;
+        }
 
         /*
         public static bool FindUserByUserNameAndPassword(ref int userID, ref int personID, ref string username, ref string password, ref bool isActive)
@@ -221,39 +238,6 @@ namespace DLMDataLayer
             }
 
             return userFound;
-        }
-
-        public static bool DeleteUser(int UserID)
-        {
-            bool isDeleted = false;
-            SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString);
-
-            string query = "Delete from Users where UserID = @UserID";
-
-            SqlCommand command = new SqlCommand(query, connection);
-
-            command.Parameters.AddWithValue("@UserID", UserID);
-
-            try
-            {
-                connection.Open();
-                int rowAffected = command.ExecuteNonQuery();
-
-                if (rowAffected > 0)
-                {
-                    isDeleted = true;
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("DB: Error when deleting this user.");
-            }
-            finally
-            {
-                connection?.Close();
-            }
-            return isDeleted;
         }
         */
     }

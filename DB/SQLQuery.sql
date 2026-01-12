@@ -64,3 +64,15 @@ BEGIN
     
     SELECT @@ROWCOUNT AS RowsAffected;
 END
+
+
+CREATE PROCEDURE DeleteUser
+    @UserID int
+As
+Begin
+    SET NOCOUNT ON;
+
+    Delete from Users where UserID = @UserID;
+
+    SELECT @@ROWCOUNT AS RowsAffected;
+End
