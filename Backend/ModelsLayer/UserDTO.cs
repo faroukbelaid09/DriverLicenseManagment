@@ -17,4 +17,33 @@
             this.IsActive = isActive;
         }
     }
+
+    // For authentication/registration
+    public class UserAuthDTO
+    {
+        public int UserID { get; set; }
+        public int PersonID { get; set; }
+        public string UserName { get; set; }
+        public string Password { get; set; }
+        public bool IsActive { get; set; }
+
+        public UserAuthDTO(int userId, int personId, string userName, string password, bool isActive)
+        {
+            this.UserID = userId;
+            this.PersonID = personId;
+            this.UserName = userName;
+            this.Password = password;
+            this.IsActive = isActive;
+        }
+    }
+
+    /*
+    // For creating/updating users (including password)
+    public class CreateUserDTO
+    {
+        public int PersonID { get; set; }
+        public string UserName { get; set; }
+        public string Password { get; set; }
+        public bool IsActive { get; set; }
+    }*/
 }

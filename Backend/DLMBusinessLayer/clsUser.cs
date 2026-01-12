@@ -39,6 +39,11 @@ namespace DLMBusinessLayer
             return clsUserDataAccess.GetUsers();
         }
 
+        public static UserAuthDTO GetUserForAuthentication(string userName)
+        {
+            return clsUserDataAccess.GetUserForAuthentication(userName);
+        }
+
         /*
         public int Add()
         {

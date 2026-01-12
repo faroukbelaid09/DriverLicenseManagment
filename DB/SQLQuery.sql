@@ -1,10 +1,18 @@
-
+-- Get users without password
 CREATE PROCEDURE GetUsers
-As
-Begin
+AS
+BEGIN
+    SELECT Users.UserID, Users.PersonID, UserName, FullName = People.FirstName+People.LastName, Users.IsActive
+    FROM Users
+    inner JOIN People ON Users.PersonID = People.PersonID
+END
 
-    SET NOCOUNT ON;
-
-    select Users.*, FullName = People.FirstName+People.LastName from Users 
-    inner join People on Users.PersonID = People.PersonID
-End
+-- Get user for authentication
+CREATE PROCEDURE GetUserForAuthentication
+    @UserName NVARCHAR(100)
+AS
+BEGIN
+    SELECT UserID, UserName, Password, IsActive
+    FROM Users
+    WHERE UserName = @UserName
+END
