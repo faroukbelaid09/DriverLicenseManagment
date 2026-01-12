@@ -44,12 +44,48 @@ namespace DLMBusinessLayer
             return clsUserDataAccess.GetUserForAuthentication(userName);
         }
 
-        /*
-        public int Add()
-        {
-            int userID = clsUserDataAccess.AddUser(this.PersonID, this.UserName, this.Password, this.IsActive);
+        public int Add(CreateUserDTO newUser)
+        {            
+            ValidateUser(newUser);
+
+            
+            // 2. Check if username exists
+            if (clsUserDataAccess.UserNameExists(newUser.UserName))
+                throw new Exception($"Username '{newUser.UserName}' is already taken");
+
+            /*
+            // 3. Check if person exists
+            if (!PersonRepository.Exists(userDto.PersonID))
+                throw new Exception($"Person with ID {userDto.PersonID} not found");
+            */
+
+            newUser.Password = HashPassword(newUser.Password);
+
+            int userID = clsUserDataAccess.AddUser(newUser);
+            
             return userID;
         }
+
+
+        private void ValidateUser(CreateUserDTO user)
+        {
+            if (string.IsNullOrWhiteSpace(user.UserName) || user.UserName.Length < 3)
+                throw new Exception("Username must be at least 3 characters");
+
+            if (string.IsNullOrWhiteSpace(user.Password) || user.Password.Length < 8)
+                throw new Exception("Password must be at least 8 characters");
+
+            if (user.PersonID <= 0)
+                throw new Exception("Invalid Person ID");
+        }
+
+        private string HashPassword(string password)
+        {
+            // Using BCrypt
+            return BCrypt.Net.BCrypt.HashPassword(password);
+        }
+
+        /*
         public bool Update()
         {
             return clsUserDataAccess.UpdateUser(this.UserID, this.UserName, this.Password, this.IsActive);

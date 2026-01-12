@@ -12,7 +12,38 @@ CREATE PROCEDURE GetUserForAuthentication
     @UserName NVARCHAR(100)
 AS
 BEGIN
-    SELECT UserID, UserName, Password, IsActive
-    FROM Users
+    SELECT UserID, Users.PersonID, UserName, Password, IsActive,FullName = People.FirstName+People.LastName
+    FROM Users inner JOIN People ON Users.PersonID = People.PersonID
     WHERE UserName = @UserName
 END
+
+-- Add user
+CREATE PROCEDURE AddUser
+    @PersonID int,
+    @UserName varchar(100),
+    @Password varchar(255),
+    @IsActive bit
+
+As
+Begin
+    SET NOCOUNT ON;
+
+    Insert into Users (PersonID, UserName, Password, IsActive)
+                            Values(@PersonID, @UserName, @Password, @IsActive);
+    
+    SELECT SCOPE_IDENTITY() AS UserID;
+End
+
+CREATE PROCEDURE UserNameExists
+    @UserName NVARCHAR(100)
+As
+Begin
+
+    SET NOCOUNT ON;
+
+    IF EXISTS(SELECT 1 FROM Users WHERE UserName = @UserName)
+        SELECT 1 AS [Exists]  -- Returns 1 if exists
+    ELSE
+        SELECT 0 AS [Exists]  -- Returns 0 if not exists
+
+End

@@ -2,7 +2,7 @@
 {
     public class UserDTO
     {
-        public int UserID { get; set; }
+        //public int UserID { get; set; }
         public int PersonID { get; set; }
         public string UserName { get; set; }
         public string FullName { get; set; }
@@ -37,7 +37,7 @@
         }
     }
 
-    /*
+    
     // For creating/updating users (including password)
     public class CreateUserDTO
     {
@@ -45,5 +45,14 @@
         public string UserName { get; set; }
         public string Password { get; set; }
         public bool IsActive { get; set; }
-    }*/
+
+        public CreateUserDTO(int personId, string userName, string password, bool isActive)
+        {
+            this.PersonID = personId;
+            this.UserName = userName;
+            this.Password = password;
+            this.IsActive = isActive;
+        }
+
+    }
 }

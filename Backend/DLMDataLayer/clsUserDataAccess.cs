@@ -32,6 +32,31 @@ namespace DLMDataLayer
             }
         }
 
+        public static bool UserNameExists(string userName)
+        {
+            bool userExist = false;
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(clsDataAccessSettings.ConnectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("UserNameExists", conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add("@UserName", SqlDbType.VarChar, 100).Value = userName;
+                        conn.Open();
+
+                        userExist = (int)cmd.ExecuteScalar() > 0;
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return userExist;
+        }
+
         public static List<UserDTO> GetUsers()
         {
             List<UserDTO> users = new List<UserDTO>();
@@ -40,6 +65,9 @@ namespace DLMDataLayer
             {
                 using (SqlCommand cmd = new SqlCommand("GetUsers", conn))
                 {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    conn.Open();
+
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
@@ -64,6 +92,10 @@ namespace DLMDataLayer
             {
                 using (SqlCommand cmd = new SqlCommand("GetUserForAuthentication", conn))
                 {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@UserName", username);
+                    conn.Open();
+
                     using (SqlDataReader reader = cmd.ExecuteReader()) 
                     {
                         if (reader.Read())
@@ -83,44 +115,35 @@ namespace DLMDataLayer
             return null;
         }
 
-        /*
-        public static int AddUser(int PersonID, string UserName, string Password, bool IsActive)
+        public static int AddUser(CreateUserDTO createUserDTO)
         {
             int UserID = -1;
 
-            SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString);
-            string query = @"Insert into Users (PersonID, UserName, Password, IsActive)
-                            Values(@PersonID, @UserName, @Password, @IsActive);
-                            SELECT SCOPE_IDENTITY();";
-
-            SqlCommand command = new SqlCommand(query, connection);
-            command.Parameters.AddWithValue("@PersonID", PersonID);
-            command.Parameters.AddWithValue("@UserName", UserName);
-            command.Parameters.AddWithValue("@Password", Password);
-            command.Parameters.AddWithValue("@IsActive", IsActive);
-
             try
             {
-                connection.Open();
-
-                object result = command.ExecuteScalar();
-
-                if (result != null && int.TryParse(result.ToString(), out int insertedID))
+                using (SqlConnection conn = new SqlConnection(clsDataAccessSettings.ConnectionString))
                 {
-                    UserID = insertedID;
+                    using (SqlCommand cmd = new SqlCommand("AddUser", conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@PersonID", createUserDTO.PersonID);
+                        cmd.Parameters.AddWithValue("@UserName", createUserDTO.UserName);
+                        cmd.Parameters.AddWithValue("@Password", createUserDTO.Password);
+                        cmd.Parameters.AddWithValue("@IsActive", createUserDTO.IsActive);
+                        conn.Open();
+
+                        UserID =  Convert.ToInt32(cmd.ExecuteScalar());
+                    }
                 }
             }
-            catch (Exception ex)
+            catch (SqlException ex)
             {
-                Console.WriteLine("DB: Error when adding a user in DB.\n" + ex.Message);
+                Console.WriteLine(ex.ToString());
             }
-            finally
-            {
-                connection?.Close();
-            }
+
             return UserID;
         }
-        */
+        
         /*
         public static bool FindUserByUserNameAndPassword(ref int userID, ref int personID, ref string username, ref string password, ref bool isActive)
         {
