@@ -45,8 +45,8 @@ namespace DLMBusinessLayer
         }
 
         public int Add(CreateUserDTO newUser)
-        {            
-            ValidateUser(newUser);
+        {
+            ValidateNewUser(newUser);
 
             
             // 2. Check if username exists
@@ -66,8 +66,18 @@ namespace DLMBusinessLayer
             return userID;
         }
 
+        public bool Update(UpdateUserProfileDTO updateUser)
+        {
+            if (string.IsNullOrWhiteSpace(updateUser.UserName) || updateUser.UserName.Length < 3)
+                throw new Exception("Username must be at least 3 characters");
 
-        private void ValidateUser(CreateUserDTO user)
+            if (clsUserDataAccess.UserNameExists(updateUser.UserName))
+                throw new Exception($"Username '{updateUser.UserName}' is already taken");
+
+            return clsUserDataAccess.UpdateUser(updateUser);
+        }
+
+        private void ValidateNewUser(CreateUserDTO user)
         {
             if (string.IsNullOrWhiteSpace(user.UserName) || user.UserName.Length < 3)
                 throw new Exception("Username must be at least 3 characters");
@@ -86,10 +96,7 @@ namespace DLMBusinessLayer
         }
 
         /*
-        public bool Update()
-        {
-            return clsUserDataAccess.UpdateUser(this.UserID, this.UserName, this.Password, this.IsActive);
-        }
+        
         public bool Delete()
         {
             return clsUserDataAccess.DeleteUser(this.UserID);

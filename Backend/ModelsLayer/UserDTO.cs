@@ -2,7 +2,7 @@
 {
     public class UserDTO
     {
-        //public int UserID { get; set; }
+        public int UserID { get; set; }
         public int PersonID { get; set; }
         public string UserName { get; set; }
         public string FullName { get; set; }
@@ -55,4 +55,33 @@
         }
 
     }
+
+    public class UpdateUserProfileDTO
+    {
+        public int UserID { get; set; }
+        public string UserName { get; set; }
+        public bool IsActive { get; set; }
+
+        public UpdateUserProfileDTO(int userId, string userName, bool isActive)
+        {
+            this.UserID = userId;
+            this.UserName = userName;
+            this.IsActive = isActive;
+        }
+    }
+
+    public class ChangePasswordDTO
+    {
+        public int UserID { get; set; }
+        public string CurrentPassword { get; set; }
+        public string NewPassword { get; set; }
+
+        public ChangePasswordDTO(int userId, string currentPassword, string newPassword)
+        {
+            this.UserID = userId;
+            this.CurrentPassword = currentPassword;
+            this.NewPassword = newPassword;
+        }
+    }
+
 }

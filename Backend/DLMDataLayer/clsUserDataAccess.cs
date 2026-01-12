@@ -143,7 +143,36 @@ namespace DLMDataLayer
 
             return UserID;
         }
-        
+
+        public static bool UpdateUser(UpdateUserProfileDTO updateUserProfileDTO)
+        {
+            bool isUpdated = false;
+
+            using (SqlConnection conn = new SqlConnection(clsDataAccessSettings.ConnectionString)) 
+            {
+                using (SqlCommand cmd = new SqlCommand("UpdateUser",conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@UserID", updateUserProfileDTO.UserID);
+                    cmd.Parameters.AddWithValue("@UserName", updateUserProfileDTO.UserName);
+                    cmd.Parameters.AddWithValue("@IsActive", updateUserProfileDTO.IsActive);
+
+                    conn.Open();
+
+                    int rowAffected = cmd.ExecuteNonQuery();
+
+                    if (rowAffected > 0)
+                    {
+                        isUpdated = true;
+                    }
+                }
+            }
+
+            return isUpdated;
+        }
+
+
         /*
         public static bool FindUserByUserNameAndPassword(ref int userID, ref int personID, ref string username, ref string password, ref bool isActive)
         {
@@ -192,47 +221,6 @@ namespace DLMDataLayer
             }
 
             return userFound;
-        }
-
-        
-
-        public static bool UpdateUser(int UserID, string UserName, string Password, bool IsActive)
-        {
-            bool isUpdated = false;
-            SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString);
-
-            string query = @"Update Users 
-                           Set UserName = @UserName, Password = @Password,IsActive = @IsActive
-                           Where UserID = @UserID";
-
-            SqlCommand command = new SqlCommand(query, connection);
-
-            command.Parameters.AddWithValue("@UserID", UserID);
-            command.Parameters.AddWithValue("@UserName", UserName);
-            command.Parameters.AddWithValue("@Password", Password);
-            command.Parameters.AddWithValue("@IsActive", IsActive);
-
-            try
-            {
-                connection.Open();
-                int rowAffected = command.ExecuteNonQuery();
-
-                if (rowAffected > 0)
-                {
-                    isUpdated = true;
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("DB: Error when updating user." + ex.ToString());
-            }
-            finally
-            {
-                connection?.Close();
-            }
-
-            return isUpdated;
         }
 
         public static bool DeleteUser(int UserID)

@@ -47,3 +47,20 @@ Begin
         SELECT 0 AS [Exists]  -- Returns 0 if not exists
 
 End
+
+-- update user
+CREATE PROCEDURE UpdateUser
+    @UserID INT,
+    @UserName VARCHAR(100),
+    @IsActive BIT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    UPDATE Users 
+    SET UserName = @UserName, 
+        IsActive = @IsActive
+    WHERE UserID = @UserID;
+    
+    SELECT @@ROWCOUNT AS RowsAffected;
+END
