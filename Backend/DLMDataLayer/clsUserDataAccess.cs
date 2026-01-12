@@ -189,56 +189,5 @@ namespace DLMDataLayer
             }
             return isDeleted;
         }
-
-        /*
-        public static bool FindUserByUserNameAndPassword(ref int userID, ref int personID, ref string username, ref string password, ref bool isActive)
-        {
-            bool userFound = false;
-            SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString);
-
-
-            string query = "select * from Users where UserName = @username and Password = @password";
-
-            SqlCommand command = new SqlCommand(query, connection);
-
-            Console.WriteLine("USN: " + username);
-            Console.WriteLine("PASS: " + password);
-            command.Parameters.AddWithValue("@username", username);
-            command.Parameters.AddWithValue("@password", password);
-
-            try
-            {
-                connection.Open();
-
-                SqlDataReader reader = command.ExecuteReader();
-
-                while (reader.Read())
-
-                {
-                    userID = (int)reader["UserID"];
-                    personID = (int)reader["PersonID"];
-                    username = (string)reader["UserName"];
-                    //fullname = (string)reader["FullName"];
-                    password = (string)reader["Password"];
-                    isActive = (bool)reader["IsActive"];
-
-                    userFound = true;
-                }
-
-                reader.Close();
-            }
-
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error: " + ex.Message);
-            }
-            finally
-            {
-                connection?.Close();
-            }
-
-            return userFound;
-        }
-        */
     }
 }

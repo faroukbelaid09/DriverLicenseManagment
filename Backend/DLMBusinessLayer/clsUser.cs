@@ -76,7 +76,59 @@ namespace DLMBusinessLayer
 
             return clsUserDataAccess.UpdateUser(updateUser);
         }
+       
+        public bool Delete(int userId)
+        {
+            return clsUserDataAccess.DeleteUser(userId);
+        }
 
+        public bool AuthenticateUser(string username, string password)
+        {
+            try
+            {
+                // Input validation
+                if (string.IsNullOrWhiteSpace(username))
+                {
+                    Console.WriteLine("Username is required");
+                    return false;
+                }
+
+
+                if (string.IsNullOrWhiteSpace(password))
+                {
+                    Console.WriteLine("Password is required");
+                    return false;
+                }
+
+                UserAuthDTO user = clsUserDataAccess.GetUserForAuthentication(username);
+
+                if (user == null)
+                {
+                    return false;
+                }
+
+                if (!user.IsActive)
+                {
+                    Console.WriteLine("Authentication failed");
+                    return false;
+                }
+
+                if (!VerifyPassword(password, user.Password))
+                {
+                    Console.WriteLine("Authentication failed");
+                    return false;
+                    
+                }
+
+                Console.WriteLine($"User {username} authenticated successfully");
+                return true;
+            }
+            catch (Exception ex) 
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
         private void ValidateNewUser(CreateUserDTO user)
         {
             if (string.IsNullOrWhiteSpace(user.UserName) || user.UserName.Length < 3)
@@ -94,37 +146,18 @@ namespace DLMBusinessLayer
             // Using BCrypt
             return BCrypt.Net.BCrypt.HashPassword(password);
         }
-        
-        public bool Delete(int userId)
-        {
-            return clsUserDataAccess.DeleteUser(userId);
-        }
 
-        /*
-        public static clsUser FindUserByUserNameAndPassword(string username, string password)
+        private bool VerifyPassword(string inputPassword, string storedHash)
         {
-            int userID = -1, personID = -1;
-            string userName = username, userPassword = password;
-            bool isActive = false;
-
-            clsUser user = null;
-            if (clsUserDataAccess.FindUserByUserNameAndPassword(ref userID, ref personID, ref userName, ref userPassword, ref isActive))
+            try
             {
-                // Create a new clsPerson object and add it to the list
-                user = new clsUser(
-                    userID,
-                    personID,
-                    userName,
-                    userPassword,
-                    isActive
-                );
+                return BCrypt.Net.BCrypt.Verify(inputPassword, storedHash);
             }
-            return user;
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Password verification error: {ex.Message}");
+                return false;
+            }
         }
-        public static bool CheckIfUserNameExist(string userName)
-        {
-            return clsUserDataAccess.CheckIfUserNameExist(userName);
-        }
-        */
     }
 }
