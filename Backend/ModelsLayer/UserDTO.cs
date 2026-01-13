@@ -1,4 +1,6 @@
-﻿namespace ModelsLayer
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ModelsLayer
 {
     public class UserDTO
     {
@@ -41,10 +43,19 @@
     // For creating/updating users (including password)
     public class CreateUserDTO
     {
-        public int PersonID { get; set; }
+        [Required(ErrorMessage = "Username is required")]
+        [StringLength(50, MinimumLength = 3, ErrorMessage = "Username must be between 3 and 50 characters")]
         public string UserName { get; set; }
+
+        [Required(ErrorMessage = "Password is required")]
+        [StringLength(100, MinimumLength = 8, ErrorMessage = "Password must be at least 8 characters")]
         public string Password { get; set; }
-        public bool IsActive { get; set; }
+
+        [Required(ErrorMessage = "Person ID is required")]
+        [Range(1, int.MaxValue, ErrorMessage = "Invalid Person ID")]
+        public int PersonID { get; set; }
+
+        public bool IsActive { get; set; } = true;
 
         public CreateUserDTO(int personId, string userName, string password, bool isActive)
         {
@@ -58,9 +69,14 @@
 
     public class UpdateUserProfileDTO
     {
+        [Required(ErrorMessage = "User ID is required")]
+        [Range(1, int.MaxValue, ErrorMessage = "Invalid User ID")]
         public int UserID { get; set; }
+        
+        [Required(ErrorMessage = "Username is required")]
+        [StringLength(50, MinimumLength = 3, ErrorMessage = "Username must be between 3 and 50 characters")]
         public string UserName { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
 
         public UpdateUserProfileDTO(int userId, string userName, bool isActive)
         {

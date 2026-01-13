@@ -34,6 +34,10 @@ namespace DLMBusinessLayer
             return clsUserDataAccess.CheckIfUserExists(personID);
         }
 
+        public static UserDTO GetUserById(int id)
+        {
+            return clsUserDataAccess.GetUserById(id);
+        }
         public static List<UserDTO> GetUsers()
         {
             return clsUserDataAccess.GetUsers();
@@ -44,7 +48,7 @@ namespace DLMBusinessLayer
             return clsUserDataAccess.GetUserForAuthentication(userName);
         }
 
-        public int Add(CreateUserDTO newUser)
+        public static int Add(CreateUserDTO newUser)
         {
             ValidateNewUser(newUser);
 
@@ -66,7 +70,7 @@ namespace DLMBusinessLayer
             return userID;
         }
 
-        public bool Update(UpdateUserProfileDTO updateUser)
+        public static bool Update(UpdateUserProfileDTO updateUser)
         {
             if (string.IsNullOrWhiteSpace(updateUser.UserName) || updateUser.UserName.Length < 3)
                 throw new Exception("Username must be at least 3 characters");
@@ -77,7 +81,7 @@ namespace DLMBusinessLayer
             return clsUserDataAccess.UpdateUser(updateUser);
         }
        
-        public bool Delete(int userId)
+        public static bool Delete(int userId)
         {
             return clsUserDataAccess.DeleteUser(userId);
         }
@@ -129,7 +133,8 @@ namespace DLMBusinessLayer
                 return false;
             }
         }
-        private void ValidateNewUser(CreateUserDTO user)
+        
+        private static void ValidateNewUser(CreateUserDTO user)
         {
             if (string.IsNullOrWhiteSpace(user.UserName) || user.UserName.Length < 3)
                 throw new Exception("Username must be at least 3 characters");
@@ -141,7 +146,7 @@ namespace DLMBusinessLayer
                 throw new Exception("Invalid Person ID");
         }
 
-        private string HashPassword(string password)
+        private static string HashPassword(string password)
         {
             // Using BCrypt
             return BCrypt.Net.BCrypt.HashPassword(password);

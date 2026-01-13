@@ -57,6 +57,35 @@ namespace DLMDataLayer
             return userExist;
         }
 
+        public static UserDTO GetUserById(int id)
+        {
+            using (SqlConnection conn = new SqlConnection(clsDataAccessSettings.ConnectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand("GetUserById", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@UserID", id);
+                    conn.Open();
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new UserDTO
+                                (
+                                    reader.GetInt32(reader.GetOrdinal("UserID")),
+                                    reader.GetInt32(reader.GetOrdinal("PersonID")),
+                                    reader.GetString(reader.GetOrdinal("UserName")),
+                                    reader.GetString(reader.GetOrdinal("FullName")),
+                                    reader.GetBoolean(reader.GetOrdinal("IsActive"))
+                                );
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
         public static List<UserDTO> GetUsers()
         {
             List<UserDTO> users = new List<UserDTO>();

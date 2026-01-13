@@ -7,6 +7,23 @@ BEGIN
     inner JOIN People ON Users.PersonID = People.PersonID
 END
 
+-- Get User By ID
+CREATE PROCEDURE GetUserById
+    @UserID INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    SELECT 
+        UserID,
+        Users.PersonID,
+        UserName,
+        FullName = People.FirstName+People.LastName,
+        IsActive
+    FROM Users inner JOIN People ON Users.PersonID = People.PersonID
+    WHERE UserID = @UserID;
+END
+
 -- Get user for authentication
 CREATE PROCEDURE GetUserForAuthentication
     @UserName NVARCHAR(100)
@@ -55,8 +72,6 @@ CREATE PROCEDURE UpdateUser
     @IsActive BIT
 AS
 BEGIN
-    SET NOCOUNT ON;
-    
     UPDATE Users 
     SET UserName = @UserName, 
         IsActive = @IsActive
@@ -70,8 +85,6 @@ CREATE PROCEDURE DeleteUser
     @UserID int
 As
 Begin
-    SET NOCOUNT ON;
-
     Delete from Users where UserID = @UserID;
 
     SELECT @@ROWCOUNT AS RowsAffected;
