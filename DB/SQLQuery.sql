@@ -89,3 +89,105 @@ Begin
 
     SELECT @@ROWCOUNT AS RowsAffected;
 End
+
+------ People ------
+
+-- Get Person By ID
+CREATE PROCEDURE GetPersonById
+    @PersonID INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    select People.*,Countries.CountryName from People 
+    inner join Countries on People.NationalityCountryID = Countries.CountryID 
+    where People.PersonID = @PersonID
+END
+
+-- Get Person By NationaNo
+CREATE PROCEDURE GetPersonByNationalNo
+    @NationalNo INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    select People.*,Countries.CountryName from People 
+    inner join Countries on People.NationalityCountryID = Countries.CountryID 
+    where People.NationalNo = @NationalNo
+END
+
+--- Get person by country name ---
+CREATE PROCEDURE GetPersonCountryName
+    @CountryID INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    Select * from Countries where CountryID = @CountryID
+END
+
+
+-- Get People
+CREATE PROCEDURE GetPeople
+AS
+BEGIN
+    select People.*,CountryName from People inner join Countries on People.NationalityCountryID = Countries.CountryID
+END
+
+-- Add person
+CREATE PROCEDURE AddPerson
+    @NationalNo varchar(20),
+    @FirstName varchar(20),
+    @LastName varchar(20),
+    @DateOfBirth datetime,
+    @Gendor int,
+    @Address varchar(500),
+    @Email varchar(100),
+    @Phone varchar(20),
+    @NationalityCountryID int,
+    @ImagePath varchar(250)
+
+As
+Begin
+    SET NOCOUNT ON;
+
+    Insert into People (NationalNo, FirstName, LastName, DateOfBirth, Gendor, Address, Email, Phone, NationalityCountryID, ImagePath)
+    Values(@NationalNo, @FirstName, @LastName, @DateOfBirth, @Gendor, @Address, @Email, @Phone, @NationalityCountryID, @ImagePath);
+    
+    SELECT SCOPE_IDENTITY() AS PersonID;
+End
+
+-- update person
+CREATE PROCEDURE UpdatePerson
+    @PersonID int,
+    @NationalNo varchar(20),
+    @FirstName varchar(20),
+    @LastName varchar(20),
+    @DateOfBirth datetime,
+    @Gendor int,
+    @Address varchar(500),
+    @Email varchar(100),
+    @Phone varchar(20),
+    @NationalityCountryID int,
+    @ImagePath varchar(250)
+AS
+BEGIN
+    Update People 
+    Set NationalNo = @NationalNo, FirstName = @FirstName, LastName = @LastName,
+    Gendor = @Gendor, NationalityCountryID = @NationalityCountryID, Email = @Email,
+    Phone=@Phone, Address=@Address,DateOfBirth=@DateOfBirth, ImagePath=@ImagePath
+    Where PersonID = @PersonID
+    
+    SELECT @@ROWCOUNT AS RowsAffected;
+END
+
+
+--- Delete person
+CREATE PROCEDURE DeletePerson
+    @PersonID int
+As
+Begin
+    Delete from People where PersonID = @PersonID;
+
+    SELECT @@ROWCOUNT AS RowsAffected;
+End
