@@ -106,7 +106,7 @@ END
 
 -- Get Person By NationaNo
 CREATE PROCEDURE GetPersonByNationalNo
-    @NationalNo INT
+    @NationalNo varchar(100)
 AS
 BEGIN
     SET NOCOUNT ON;

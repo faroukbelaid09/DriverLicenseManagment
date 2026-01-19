@@ -20,9 +20,11 @@ namespace DLMDataLayer
                     {
                         if (reader.Read())
                         {
-                            return new PersonDTO
-                                (
-                                    reader.GetInt32(reader.GetOrdinal("PersonID")),
+                            int imagePathOrdinal = reader.GetOrdinal("ImagePath");
+                            int emailOrdinal = reader.GetOrdinal("Email");
+
+                            return new PersonDTO(
+                                reader.GetInt32(reader.GetOrdinal("PersonID")),
                                     reader.GetString(reader.GetOrdinal("NationalNo")),
                                     reader.GetString(reader.GetOrdinal("FirstName")),
                                     reader.GetString(reader.GetOrdinal("LastName")),
@@ -31,8 +33,10 @@ namespace DLMDataLayer
                                     reader.GetString(reader.GetOrdinal("Address")),
                                     reader.GetDateTime(reader.GetOrdinal("DateOfBirth")),
                                     reader.GetString(reader.GetOrdinal("CountryName")),
-                                    reader.GetString(reader.GetOrdinal("ImagePath")),
-                                    reader.GetString(reader.GetOrdinal("Email"))
+
+                                    reader.IsDBNull(imagePathOrdinal) ? null : reader.GetString(imagePathOrdinal),
+                                    reader.IsDBNull(emailOrdinal) ? null : reader.GetString(emailOrdinal)
+
                                 );
                         }
                     }
@@ -55,9 +59,11 @@ namespace DLMDataLayer
                     {
                         if (reader.Read())
                         {
-                            return new PersonDTO
-                                (
-                                    reader.GetInt32(reader.GetOrdinal("PersonID")),
+                            int imagePathOrdinal = reader.GetOrdinal("ImagePath");
+                            int emailOrdinal = reader.GetOrdinal("Email");
+
+                            return new PersonDTO(
+                                reader.GetInt32(reader.GetOrdinal("PersonID")),
                                     reader.GetString(reader.GetOrdinal("NationalNo")),
                                     reader.GetString(reader.GetOrdinal("FirstName")),
                                     reader.GetString(reader.GetOrdinal("LastName")),
@@ -66,8 +72,10 @@ namespace DLMDataLayer
                                     reader.GetString(reader.GetOrdinal("Address")),
                                     reader.GetDateTime(reader.GetOrdinal("DateOfBirth")),
                                     reader.GetString(reader.GetOrdinal("CountryName")),
-                                    reader.GetString(reader.GetOrdinal("ImagePath")),
-                                    reader.GetString(reader.GetOrdinal("Email"))
+
+                                    reader.IsDBNull(imagePathOrdinal) ? null : reader.GetString(imagePathOrdinal),
+                                    reader.IsDBNull(emailOrdinal) ? null : reader.GetString(emailOrdinal)
+
                                 );
                         }
                     }
@@ -76,7 +84,7 @@ namespace DLMDataLayer
             return null;
         }
 
-        public static PersonDTO GetPersonCountryName(int CountryID)
+        public static string GetPersonCountryName(int CountryID)
         {
             using (SqlConnection conn = new SqlConnection(clsDataAccessSettings.ConnectionString))
             {
@@ -90,20 +98,7 @@ namespace DLMDataLayer
                     {
                         if (reader.Read())
                         {
-                            return new PersonDTO
-                                (
-                                    reader.GetInt32(reader.GetOrdinal("PersonID")),
-                                    reader.GetString(reader.GetOrdinal("NationalNo")),
-                                    reader.GetString(reader.GetOrdinal("FirstName")),
-                                    reader.GetString(reader.GetOrdinal("LastName")),
-                                    reader.GetInt32(reader.GetOrdinal("Gendor")),
-                                    reader.GetString(reader.GetOrdinal("Phone")),
-                                    reader.GetString(reader.GetOrdinal("Address")),
-                                    reader.GetDateTime(reader.GetOrdinal("DateOfBirth")),
-                                    reader.GetString(reader.GetOrdinal("CountryName")),
-                                    reader.GetString(reader.GetOrdinal("ImagePath")),
-                                    reader.GetString(reader.GetOrdinal("Email"))
-                                );
+                            return reader.GetString(reader.GetOrdinal("CountryName"));
                         }
                     }
                 }
@@ -126,6 +121,9 @@ namespace DLMDataLayer
                     {
                         while (reader.Read())
                         {
+                            int imagePathOrdinal = reader.GetOrdinal("ImagePath");
+                            int emailOrdinal = reader.GetOrdinal("Email");
+
                             people.Add(new PersonDTO(
                                 reader.GetInt32(reader.GetOrdinal("PersonID")),
                                     reader.GetString(reader.GetOrdinal("NationalNo")),
@@ -136,8 +134,10 @@ namespace DLMDataLayer
                                     reader.GetString(reader.GetOrdinal("Address")),
                                     reader.GetDateTime(reader.GetOrdinal("DateOfBirth")),
                                     reader.GetString(reader.GetOrdinal("CountryName")),
-                                    reader.GetString(reader.GetOrdinal("ImagePath")),
-                                    reader.GetString(reader.GetOrdinal("Email"))
+
+                                    reader.IsDBNull(imagePathOrdinal) ? null : reader.GetString(imagePathOrdinal),
+                                    reader.IsDBNull(emailOrdinal) ? null : reader.GetString(emailOrdinal)
+
                                 ));
                         }
                     }
@@ -149,22 +149,21 @@ namespace DLMDataLayer
         public static int AddPerson(CreatePersonDTO createPersonDTO)
         {
             int PersonID = -1;
-
             try
             {
                 using (SqlConnection conn = new SqlConnection(clsDataAccessSettings.ConnectionString))
                 {
-                    using (SqlCommand cmd = new SqlCommand("AddUser", conn))
+                    using (SqlCommand cmd = new SqlCommand("AddPerson", conn))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@NationalNo", createPersonDTO.NationalNo);
                         cmd.Parameters.AddWithValue("@FirstName", createPersonDTO.FirstName);
                         cmd.Parameters.AddWithValue("@LastName", createPersonDTO.LastName);
                         cmd.Parameters.AddWithValue("@DateOfBirth", createPersonDTO.DateOfBirth);
-                        cmd.Parameters.AddWithValue("@Gender", createPersonDTO.Gender);
+                        cmd.Parameters.AddWithValue("@Gendor", createPersonDTO.Gender);
                         cmd.Parameters.AddWithValue("@Address", createPersonDTO.Address);
                         cmd.Parameters.AddWithValue("@Phone", createPersonDTO.Phone);
-                        cmd.Parameters.AddWithValue("@CountryName", createPersonDTO.CountryName);
+                        cmd.Parameters.AddWithValue("@NationalityCountryID", createPersonDTO.CountryID);
 
                         if (createPersonDTO.Email != null)
                         {
@@ -204,19 +203,19 @@ namespace DLMDataLayer
 
             using (SqlConnection conn = new SqlConnection(clsDataAccessSettings.ConnectionString))
             {
-                using (SqlCommand cmd = new SqlCommand("UpdateUser", conn))
+                using (SqlCommand cmd = new SqlCommand("UpdatePerson", conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    cmd.Parameters.AddWithValue("@UserID", updatePersonDTO.UserID);
+                    cmd.Parameters.AddWithValue("@PersonID", updatePersonDTO.PersonID);
                     cmd.Parameters.AddWithValue("@NationalNo", updatePersonDTO.NationalNo);
                     cmd.Parameters.AddWithValue("@FirstName", updatePersonDTO.FirstName);
                     cmd.Parameters.AddWithValue("@LastName", updatePersonDTO.LastName);
                     cmd.Parameters.AddWithValue("@DateOfBirth", updatePersonDTO.DateOfBirth);
-                    cmd.Parameters.AddWithValue("@Gender", updatePersonDTO.Gender);
+                    cmd.Parameters.AddWithValue("@Gendor", updatePersonDTO.Gender);
                     cmd.Parameters.AddWithValue("@Address", updatePersonDTO.Address);
                     cmd.Parameters.AddWithValue("@Phone", updatePersonDTO.Phone);
-                    cmd.Parameters.AddWithValue("@CountryName", updatePersonDTO.CountryName);
+                    cmd.Parameters.AddWithValue("@NationalityCountryID", updatePersonDTO.CountryID);
 
                     if (updatePersonDTO.Email != null)
                     {
