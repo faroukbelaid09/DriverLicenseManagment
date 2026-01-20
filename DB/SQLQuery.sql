@@ -191,3 +191,52 @@ Begin
 
     SELECT @@ROWCOUNT AS RowsAffected;
 End
+
+
+
+--- Create driver ---
+CREATE PROCEDURE AddDriver
+    @PersonID int,
+    @CreatedByUserID int,
+    @CreatedDate datetime
+
+As
+Begin
+    SET NOCOUNT ON;
+
+    Insert into Drivers (PersonID, CreatedByUserID, CreatedDate)
+    Values(@PersonID, @CreatedByUserID, @CreatedDate);
+    
+    SELECT SCOPE_IDENTITY();
+End
+
+
+--- Find driver by person id ---
+CREATE PROCEDURE FindDriver
+    @PersonID INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    select 1 from Drivers where PersonID = @PersonID
+END
+
+--- Get Driver ID ---
+CREATE PROCEDURE GetDriverId
+    @PersonID INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    select DriverID from Drivers where PersonID = @PersonID
+END
+
+--- Get all drivers ---
+CREATE PROCEDURE GetDrivers
+AS
+BEGIN
+    select Drivers.*, DriverName = People.FirstName+People.LastName, 
+    CreatedBy = Users.UserName from Drivers inner join People on 
+    Drivers.PersonID = People.PersonID inner join users on 
+    Drivers.CreatedByUserID = Users.UserID
+END
