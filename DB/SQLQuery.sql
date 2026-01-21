@@ -251,3 +251,40 @@ BEGIN
     Drivers.PersonID = People.PersonID inner join users on 
     Drivers.CreatedByUserID = Users.UserID
 END
+
+
+
+--- Get all application types ---
+CREATE PROCEDURE GetAllApplicationTypes
+
+AS
+BEGIN
+    select * from ApplicationTypes
+END
+
+
+--- update application type ---
+
+CREATE PROCEDURE UpdateApplicationType
+    @AppID int,
+    @AppTitle varchar(150),
+    @AppFees int
+AS
+BEGIN
+    Update ApplicationTypes 
+    Set ApplicationTypeTitle = @AppTitle, ApplicationFees = @AppFees
+    Where ApplicationTypeID = @AppID
+    
+    SELECT @@ROWCOUNT AS RowsAffected;
+END
+
+--- Get application type by id ---
+
+CREATE PROCEDURE GetApplicationTypeById
+    @AppTypeID INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    select * from ApplicationTypes where ApplicationTypeID =@AppTypeID
+End
