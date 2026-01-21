@@ -58,7 +58,34 @@ namespace DLMDataLayer
                                     reader.GetInt32(reader.GetOrdinal("DriverID")),
                                     reader.GetInt32(reader.GetOrdinal("PersonID")),
                                     reader.GetInt32(reader.GetOrdinal("CreatedByUserID")),
-                                    reader.GetString(reader.GetOrdinal("CreatedDate"))
+                                    reader.GetDateTime(reader.GetOrdinal("CreatedDate"))
+                                );
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+        public static DriverDTO FindDriverById(int driverId)
+        {
+            using (SqlConnection conn = new SqlConnection(clsDataAccessSettings.ConnectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand("FindDriverByID", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@DriverID", driverId);
+                    conn.Open();
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new DriverDTO(
+                                    reader.GetInt32(reader.GetOrdinal("DriverID")),
+                                    reader.GetInt32(reader.GetOrdinal("PersonID")),
+                                    reader.GetInt32(reader.GetOrdinal("CreatedByUserID")),
+                                    reader.GetDateTime(reader.GetOrdinal("CreatedDate"))
                                 );
                         }
                     }
@@ -110,13 +137,13 @@ namespace DLMDataLayer
                                     reader.GetInt32(reader.GetOrdinal("DriverID")),
                                     reader.GetInt32(reader.GetOrdinal("PersonID")),
                                     reader.GetInt32(reader.GetOrdinal("CreatedByUserID")),
-                                    reader.GetString(reader.GetOrdinal("CreatedDate"))
+                                    reader.GetDateTime(reader.GetOrdinal("CreatedDate"))
                                 ));
                         }
                     }
                 }
             }
-            return people;
+            return drivers;
         }
     }
 }

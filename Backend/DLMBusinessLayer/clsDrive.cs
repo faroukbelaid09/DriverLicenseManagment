@@ -10,7 +10,7 @@ namespace DLMBusinessLayer
 {
     public class clsDrive
     {
-        public int CreateDriverDTO(CreateDriverDTO newDriver)
+        public static int CreateDriver(CreateDriverDTO newDriver)
         {
 
             if(newDriver == null)
@@ -21,17 +21,22 @@ namespace DLMBusinessLayer
             return clsDriverDataAccess.CreateDriver(newDriver);
         }
 
-        public DriverDTO FindDriver(int personId)
+        public static DriverDTO FindDriverByPersonId(int personId)
         {
             return clsDriverDataAccess.FindDriver(personId);
         }
 
-        public int GetDriverID(int personId)
+        public static DriverDTO FindDriverById(int driverId)
+        {
+            return clsDriverDataAccess.FindDriverById(driverId);
+        }
+
+        public static int GetDriverID(int personId)
         {
             return clsDriverDataAccess.GetDriverID(personId);
         }
 
-        public List<DriverDTO> GetDrivers()
+        public static List<DriverDTO> GetDrivers()
         {
             return clsDriverDataAccess.GetDrivers();
         }

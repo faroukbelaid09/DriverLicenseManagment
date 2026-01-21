@@ -218,8 +218,18 @@ AS
 BEGIN
     SET NOCOUNT ON;
     
-    select 1 from Drivers where PersonID = @PersonID
+    select * from Drivers where PersonID = @PersonID
 END
+
+
+CREATE PROCEDURE FindDriverByID
+    @DriverID INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    select * from Drivers where DriverID = @DriverID 
+End
 
 --- Get Driver ID ---
 CREATE PROCEDURE GetDriverId
@@ -233,6 +243,7 @@ END
 
 --- Get all drivers ---
 CREATE PROCEDURE GetDrivers
+
 AS
 BEGIN
     select Drivers.*, DriverName = People.FirstName+People.LastName, 

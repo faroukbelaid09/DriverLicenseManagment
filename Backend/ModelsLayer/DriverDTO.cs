@@ -11,9 +11,9 @@ namespace ModelsLayer
         public int DriverID { get; set; }
         public int PersonID { get; set; }
         public int CreatedByUserID { get; set; }
-        public string CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
 
-        public DriverDTO(int driverId, int personId, int createdId, string createdDate)
+        public DriverDTO(int driverId, int personId, int createdId, DateTime createdDate)
         {
             this.DriverID = driverId;
             this.PersonID = personId;
@@ -26,13 +26,13 @@ namespace ModelsLayer
     {
         public int PersonID { get; set; }
         public int CreatedByUserID { get; set; }
-        public string CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
 
-        public CreateDriverDTO(int personId, int createdId, string createdDate)
+        public CreateDriverDTO(int PersonID, int CreatedByUserID, DateTime CreatedDate)
         {
-            this.PersonID = personId;
-            this.CreatedByUserID = createdId;
-            this.CreatedDate = createdDate;
+            this.PersonID = PersonID;
+            this.CreatedByUserID = CreatedByUserID;
+            this.CreatedDate = CreatedDate;
         }
     }
 
@@ -41,9 +41,9 @@ namespace ModelsLayer
         public int DriverID { get; set; }
         public int PersonID { get; set; }
         public int CreatedByUserID { get; set; }
-        public string CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
 
-        public UpdateDriverDTO(int driverId, int personId, int createdId, string createdDate)
+        public UpdateDriverDTO(int driverId, int personId, int createdId, DateTime createdDate)
         {
             this.DriverID = driverId;
             this.PersonID = personId;
