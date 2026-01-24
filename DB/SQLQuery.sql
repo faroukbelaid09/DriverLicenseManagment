@@ -288,3 +288,85 @@ BEGIN
 
     select * from ApplicationTypes where ApplicationTypeID =@AppTypeID
 End
+
+
+
+--- Create Appliocation ---
+
+CREATE PROCEDURE CreateApplication
+    @ApplicantPersonID int,
+    @ApplicationDate datetime,
+    @ApplicationTypeID int,
+    @ApplicationStatus int,
+    @LastStatusDate datetime,
+    @PaidFees int,
+    @CreatedByUserID int
+
+As
+Begin
+    SET NOCOUNT ON;
+
+    Insert into Applications (ApplicantPersonID, ApplicationDate, ApplicationTypeID, 
+                            ApplicationStatus, LastStatusDate, PaidFees, CreatedByUserID)
+                            Values(@ApplicantPersonID, @ApplicationDate, @ApplicationTypeID, @ApplicationStatus, 
+                            @LastStatusDate, @PaidFees, @CreatedByUserID);
+
+    SELECT SCOPE_IDENTITY();
+End
+
+CREATE PROCEDURE FindApplication
+    @appID int
+
+As
+Begin
+
+    select Applications.*,FullName = People.FirstName + People.LastName,
+    ApplicationTypes.ApplicationTypeTitle,Users.UserName
+    from Applications inner join People on People.PersonID = Applications.ApplicantPersonID
+    inner join ApplicationTypes on ApplicationTypes.ApplicationTypeID = Applications.ApplicationTypeID
+    inner join Users on Users.UserID = Applications.CreatedByUserID
+    where ApplicationID = @appID
+
+End
+
+
+--- Get all locale app ---
+
+CREATE PROCEDURE GetAllLocalApplications
+    
+As
+Begin
+
+    select * from LocalDrivingLicenseFullApplications
+
+End
+
+
+--- Check If Application Exist ---
+
+CREATE PROCEDURE CheckIfApplicationExist
+    @nationalNo nvarchar(150),
+    @drivingClass nvarchar(150)
+As
+Begin
+
+    select 1 from LocalDrivingLicenseFullApplications
+                  where NationalNo = @nationalNo and DrivingClass LIKE '%' + @drivingClass + '%'
+                  and(ApplicationStatus = 1 or ApplicationStatus = 3)
+
+End
+
+
+--- Update Application Status ---
+
+CREATE PROCEDURE UpdateApplicationStatus
+    @appID int,
+    @appStatus int
+As
+Begin
+
+    Update Applications 
+                           Set ApplicationStatus = @appStatus
+                            Where ApplicationID = @appID
+
+End
