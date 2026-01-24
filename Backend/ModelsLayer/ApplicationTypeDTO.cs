@@ -12,11 +12,11 @@ namespace ModelsLayer
         public string ApplicationTypeTitle { get; set; }
         public int ApplicationFees { get; set; }
 
-        public ApplicationTypeDTO(int appTypeId, string appTypeTitle, int appTypeFee) 
+        public ApplicationTypeDTO(int applicationTypeID, string applicationTypeTitle, int applicationFees)
         {
-            this.ApplicationTypeID = appTypeId;
-            this.ApplicationTypeTitle = appTypeTitle;
-            this.ApplicationFees = appTypeFee;
-        } 
+            this.ApplicationTypeID = applicationTypeID;
+            this.ApplicationTypeTitle = applicationTypeTitle;
+            this.ApplicationFees = applicationFees;
+        }
     }
 }
