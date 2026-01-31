@@ -11,7 +11,7 @@ namespace DLMDataLayer
 {
     public class clsLicenseClassDataAccess
     {
-        public List<LicenseClassDTO> GetLicenseClasses()
+        public static List<LicenseClassDTO> GetLicenseClasses()
         {
             List<LicenseClassDTO> licenseClasses = new List<LicenseClassDTO>();
 
@@ -43,7 +43,7 @@ namespace DLMDataLayer
         }
 
 
-        public LicenseClassDTO GetLicenseClassByName(string className) 
+        public static LicenseClassDTO GetLicenseClassByName(string className) 
         {
             using (SqlConnection conn = new SqlConnection(clsDataAccessSettings.ConnectionString))
             {
@@ -74,7 +74,7 @@ namespace DLMDataLayer
         }
     
     
-        public List<string> GetClassesNames()
+        public static List<string> GetClassesNames()
         {
             List<string> classesNames = new List<string>();
 
