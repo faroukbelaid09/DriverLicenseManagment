@@ -370,3 +370,37 @@ Begin
                             Where ApplicationID = @appID
 
 End
+
+
+--- Get License Classes ---
+
+CREATE PROCEDURE GetLicenseClasses
+    
+As
+Begin
+
+    select * from LicenseClasses;
+
+End
+
+--- Get License ClassNames ---
+
+CREATE PROCEDURE GetLicenseClassNames
+    
+As
+Begin
+
+    select ClassName from LicenseClasses
+
+End
+
+
+--- Get Class By Name ---
+
+CREATE PROCEDURE GetClassByName
+    @className nvarchar(100)
+As
+Begin
+    Select * from LicenseClasses where ClassName = @className;
+End
+
