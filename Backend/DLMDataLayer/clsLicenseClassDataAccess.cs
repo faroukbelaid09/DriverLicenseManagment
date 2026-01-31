@@ -55,7 +55,7 @@ namespace DLMDataLayer
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        if (reader.HasRows)
+                        if (reader.Read())
                         {
                             return new LicenseClassDTO(
                                 reader.GetInt32(reader.GetOrdinal("LicenseClassID")),
