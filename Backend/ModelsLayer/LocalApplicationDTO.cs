@@ -28,4 +28,34 @@ namespace ModelsLayer
             this.ApplicationStatus = ApplicationStatus;
         }
     }
+
+
+
+    public class CreateLocalApplicationDTO 
+    {
+        public int ApplicationID { get; set; }
+        public int LicenseClassID { get; set; }
+        
+        public CreateLocalApplicationDTO(int ApplicationID, int LicenseClassID)
+        {
+            this.ApplicationID = ApplicationID;
+            this.LicenseClassID = LicenseClassID;
+        }
+    }
+
+
+
+    public class FindLocalApplicationDTO
+    {
+        public int LocalDrivingLicenseApplicationID { get; set; }
+        public int ApplicationID { get; set; }
+        public int LicenseClassID { get; set; }
+
+        public FindLocalApplicationDTO(int LocalDrivingLicenseApplicationID, int ApplicationID, int LicenseClassID)
+        {
+            this.LocalDrivingLicenseApplicationID = LocalDrivingLicenseApplicationID;
+            this.ApplicationID = ApplicationID;
+            this.LicenseClassID = LicenseClassID;
+        }
+    }
 }

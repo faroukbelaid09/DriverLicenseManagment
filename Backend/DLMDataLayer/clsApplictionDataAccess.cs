@@ -11,37 +11,6 @@ namespace DLMDataLayer
 {
     public class clsApplicationDataAccess
     {
-        public static List<LocalApplicationDTO> GetAllLocalApplications()
-        {
-            List<LocalApplicationDTO> localApplications = new List<LocalApplicationDTO>();
-
-            using (SqlConnection conn = new SqlConnection(clsDataAccessSettings.ConnectionString))
-            {
-                using (SqlCommand cmd = new SqlCommand("GetAllLocalApplications", conn))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    conn.Open();
-
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            localApplications.Add(new LocalApplicationDTO(
-                                reader.GetInt32(reader.GetOrdinal("LocalDrivingLicenseApplicationID")),
-                                reader.GetString(reader.GetOrdinal("DrivingClass")),
-                                reader.GetString(reader.GetOrdinal("NationalNo")),
-                                reader.GetString(reader.GetOrdinal("FullName")),
-                                reader.GetDateTime(reader.GetOrdinal("ApplicationDate")),
-                                reader.GetInt32(reader.GetOrdinal("PassedTests")),
-                                reader.GetInt32(reader.GetOrdinal("ApplicationStatus"))
-                                ));
-                        }
-                    }
-                }
-            }
-            return localApplications;
-        }
-
         public static bool CheckIfApplicationExist(string nationalNo, string drivingClass)
         {
             using (SqlConnection conn = new SqlConnection(clsDataAccessSettings.ConnectionString))
