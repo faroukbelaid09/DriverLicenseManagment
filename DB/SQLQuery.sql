@@ -401,6 +401,44 @@ CREATE PROCEDURE GetClassByName
     @className nvarchar(100)
 As
 Begin
-    Select * from LicenseClasses where ClassName = @className;
+    Select * from LicenseClasses where ClassName = 'Class 1 - Small Motorcycle';
 End
 
+
+--- Create Local Appliocation ---
+
+CREATE PROCEDURE CreateLocalDrivingLicenseApplication
+    @ApplicationID int,
+    @LicenseClassID int
+
+As
+Begin
+    SET NOCOUNT ON;
+
+    Insert into LocalDrivingLicenseApplications (ApplicationID, LicenseClassID)
+                            Values(@ApplicationID, @LicenseClassID)
+
+    SELECT SCOPE_IDENTITY();
+End
+
+--- Find Local app ---
+CREATE PROCEDURE FindLocalApplication
+    @LocalAppID int
+
+As
+Begin
+
+    select * from LocalDrivingLicenseApplications
+                            where LocalDrivingLicenseApplicationID = @LocalAppID
+
+End
+
+--- Delete Local Application ---
+CREATE PROCEDURE DeleteLocalApplication
+    @AppID int
+As
+Begin
+    Delete from LocalDrivingLicenseApplications where LocalDrivingLicenseApplicationID = @AppID
+
+    SELECT @@ROWCOUNT AS RowsAffected;
+End
