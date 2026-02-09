@@ -330,18 +330,6 @@ Begin
 End
 
 
---- Get all locale app ---
-
-CREATE PROCEDURE GetAllLocalApplications
-    
-As
-Begin
-
-    select * from LocalDrivingLicenseFullApplications
-
-End
-
-
 --- Check If Application Exist ---
 
 CREATE PROCEDURE CheckIfApplicationExist
@@ -404,6 +392,17 @@ Begin
     Select * from LicenseClasses where ClassName = 'Class 1 - Small Motorcycle';
 End
 
+
+--- Get all locale app ---
+
+CREATE PROCEDURE GetAllLocalApplications
+    
+As
+Begin
+
+    select * from LocalDrivingLicenseFullApplications
+
+End
 
 --- Create Local Appliocation ---
 
